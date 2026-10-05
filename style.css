@@ -1,0 +1,75 @@
+* {
+    box-sizing: border-box;
+}
+
+header {
+    text-align: center;
+}
+
+.adding-activities-container {
+    margin-top: 25px;
+    display: flex;
+    justify-content: space-between;
+}
+
+#activity-input {
+    width: 70%;
+    font-size: larger;
+}
+
+#add-button {
+    background-color: rgb(15, 233, 15, 0.8);
+    text-align: center;
+    width: 15%;
+    margin-right: 7.5%;
+    border: 1px solid black;
+    border-radius: 20px;
+}
+
+#add-button:hover {
+    cursor: pointer;
+    background-color: rgba(22, 183, 22, 0.8);
+}
+
+.to-do-item-container {
+    border: 1px solid black;
+    border-radius: 20px;
+    margin-top: 10px;
+    display: flex;
+    justify-content: right;
+    gap: 10px;
+    align-items: center;
+}
+
+.activity-text {
+    margin-right: auto;
+    margin-left: 10px;
+    overflow: scroll;
+}
+
+.submit-btn {
+    width: 7%;
+    padding: 5px;
+    cursor: pointer;
+    border: 1px solid black;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.submit-btn:hover {
+    background-color: rgb(0, 255, 0, 0.5);
+}
+
+.remove-btn {
+    width: 7%;
+    padding: 5px;
+    cursor: pointer;
+    border: 1px solid black;
+    border-radius: 10px;
+    text-align: center;
+    margin-right: 25px;
+}
+
+.remove-btn:hover {
+    background-color: rgba(255, 0, 0, 0.5);
+}
