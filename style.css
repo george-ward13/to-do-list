@@ -12,6 +12,18 @@ header {
     justify-content: space-between;
 }
 
+.all-activities-container {
+    display: flex;
+}
+
+.activities-container {
+    width: 50%;
+}
+
+.completed-activities-container {
+    width: 50%
+}
+
 #activity-input {
     width: 70%;
     font-size: larger;
@@ -32,6 +44,7 @@ header {
 }
 
 .to-do-item-container {
+    width: 96%;
     border: 1px solid black;
     border-radius: 20px;
     margin-top: 10px;
@@ -45,15 +58,20 @@ header {
     margin-right: auto;
     margin-left: 10px;
     overflow: scroll;
+    order: 10;
 }
 
 .submit-btn {
-    width: 7%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 255, 0, 0.2);
+    width: 12%;
     padding: 5px;
     cursor: pointer;
     border: 1px solid black;
     border-radius: 10px;
-    text-align: center;
+    order: 20;
 }
 
 .submit-btn:hover {
@@ -61,15 +79,37 @@ header {
 }
 
 .remove-btn {
-    width: 7%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(255, 0, 0, 0.2);
+    width: 12%;
     padding: 5px;
     cursor: pointer;
     border: 1px solid black;
     border-radius: 10px;
-    text-align: center;
     margin-right: 25px;
+    order: 30;
 }
 
 .remove-btn:hover {
     background-color: rgba(255, 0, 0, 0.5);
+}
+
+.unsubmit-btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 40px;
+    background-color: rgb(47, 45, 45, 0.2);
+    width: 12%;
+    padding: 5px;
+    cursor: pointer;
+    border: 1px solid black;
+    border-radius: 10px;
+    order: 20;
+}
+
+.unsubmit-btn:hover {
+    background-color: rgb(47, 45, 45, 0.5);
 }
