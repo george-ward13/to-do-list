@@ -2,6 +2,7 @@ const addBtn = document.querySelector('#add-button')
 const inputtedActivity = document.querySelector('#activity-input')
 const activitiesContainer = document.querySelector('.activities-container')
 const completedActivitiesContainer = document.querySelector('.completed-activities-container')
+const completedActivitiesNum = document.querySelector('#num-of-completed-activities')
 
 function addActivity() {
     const taskText = inputtedActivity.value.trim()
@@ -29,16 +30,20 @@ function addActivity() {
             unsubmitBtn.classList.add('unsubmit-btn')
             unsubmitBtn.textContent = "↩️"
             newDiv.append(unsubmitBtn)
+            completedActivitiesNum.textContent = completedActivitiesContainer.childElementCount - 1
 
             unsubmitBtn.addEventListener('click', function() {
+
                 unsubmitBtn.remove()
                 activitiesContainer.appendChild(newDiv)
                 newDiv.appendChild(submitBtn)
+                completedActivitiesNum.textContent = completedActivitiesContainer.childElementCount - 1
             })
         })
 
         removeBtn.addEventListener('click', function() {
             newDiv.remove()
+            completedActivitiesNum.textContent = completedActivitiesContainer.childElementCount - 1
         })
     }
     inputtedActivity.value = ""
