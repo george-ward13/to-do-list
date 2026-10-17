@@ -3,6 +3,11 @@ const inputtedActivity = document.querySelector('#activity-input')
 const activitiesContainer = document.querySelector('.activities-container')
 const completedActivitiesContainer = document.querySelector('.completed-activities-container')
 const completedActivitiesNum = document.querySelector('#num-of-completed-activities')
+const unfinishedTabBtn = document.querySelector('#unfinished-tab')
+const completedTabBtn = document.querySelector('#completed-tab')
+const allTabBtn = document.querySelector('#all-tab')
+
+allTabBtn.style.backgroundColor = 'rgb(163, 154, 112)'
 
 function addActivity() {
     const taskText = inputtedActivity.value.trim()
@@ -57,4 +62,28 @@ document.addEventListener('keydown', function(event) {
     if (event.key === 'Enter') {
         addActivity()
     }
+})
+
+allTabBtn.addEventListener('click', function() {
+    allTabBtn.style.backgroundColor = 'rgb(163, 154, 112)'
+    completedTabBtn.style.backgroundColor = ''
+    unfinishedTabBtn.style.backgroundColor = ''
+    activitiesContainer.classList.add('active')
+    completedActivitiesContainer.classList.add('active')
+})
+
+unfinishedTabBtn.addEventListener('click', function() {
+    unfinishedTabBtn.style.backgroundColor = 'rgb(163, 154, 112)'
+    completedTabBtn.style.backgroundColor = ''
+    allTabBtn.style.backgroundColor = ''
+    activitiesContainer.classList.add('active')
+    completedActivitiesContainer.classList.remove('active')
+})
+
+completedTabBtn.addEventListener('click', function() {
+    completedTabBtn.style.backgroundColor = 'rgb(163, 154, 112)'
+    unfinishedTabBtn.style.backgroundColor = ''
+    allTabBtn.style.backgroundColor = ''
+    completedActivitiesContainer.classList.add('active')
+    activitiesContainer.classList.remove('active')
 })

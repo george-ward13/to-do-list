@@ -2,6 +2,14 @@
     box-sizing: border-box;
 }
 
+.act-container {
+    display: none;
+}
+
+.act-container.active {
+    display: revert;
+}
+
 header {
     text-align: center;
 }
@@ -17,18 +25,6 @@ header {
     border-radius: 50px;
     margin-top: 20px;
     text-align: center;
-}
-
-.all-activities-container {
-    display: flex;
-}
-
-.activities-container {
-    width: 50%;
-}
-
-.completed-activities-container {
-    width: 50%
 }
 
 #activity-input {
@@ -50,6 +46,25 @@ header {
     background-color: rgba(22, 183, 22, 0.8);
 }
 
+.tabs-container {
+    margin-top: 20px;
+    display: flex;
+    gap: 5px;
+}
+
+.tab {
+    font-size: small;
+    border: 1px solid black;
+    border-radius: 30px;
+    padding: 5px 10px;
+    cursor: pointer;
+    background-color: rgb(236, 222, 153);
+}
+
+.tab:hover {
+    background-color: rgb(192, 181, 127);
+}
+
 .to-do-item-container {
     width: 96%;
     border: 1px solid black;
@@ -64,7 +79,7 @@ header {
 .activity-text {
     margin-right: auto;
     margin-left: 10px;
-    overflow: scroll;
+    overflow-wrap: anywhere;
     order: 10;
 }
 
