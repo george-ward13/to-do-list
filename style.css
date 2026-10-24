@@ -65,6 +65,18 @@ header {
     background-color: rgb(192, 181, 127);
 }
 
+.both-activities-container .to-do-item-container.completed .activity-text {
+    text-decoration: line-through;
+    text-decoration-thickness: 2px;
+    text-decoration-color: lightgreen;
+}
+
+.completed-activities-container .to-do-item-container .activity-text {
+    text-decoration: line-through;
+    text-decoration-thickness: 2px;
+    text-decoration-color: lightgreen;
+}
+
 .to-do-item-container {
     width: 96%;
     border: 1px solid black;
