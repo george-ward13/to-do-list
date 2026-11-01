@@ -1,4 +1,3 @@
-
 const addBtn = document.querySelector('#add-button')
 const inputtedActivity = document.querySelector('#activity-input')
 const bothActivitiesContainer = document.querySelector('.both-activities-container')
@@ -9,16 +8,22 @@ const unfinishedTabBtn = document.querySelector('#unfinished-tab')
 const completedTabBtn = document.querySelector('#completed-tab')
 const allTabBtn = document.querySelector('#all-tab')
 
+let itemCount = 0
+
 allTabBtn.style.backgroundColor = 'rgb(163, 154, 112)'
 
 function addActivity() {
     const taskText = inputtedActivity.value.trim()
 
     if (taskText !== "") {
+        itemCount += 1
         const newDiv = document.createElement('div')
         newDiv.classList.add('to-do-item-container')
 
         const allDiv = newDiv.cloneNode(true)
+
+        newDiv.style.order = itemCount
+        allDiv.style.order = itemCount
 
         activitiesContainer.appendChild(newDiv)
         bothActivitiesContainer.appendChild(allDiv)
@@ -68,8 +73,7 @@ function addActivity() {
             allUnsubmitBtn.textContent = "↩️"
             allDiv.appendChild(allUnsubmitBtn)
 
-            completedActivitiesNum.textContent =
-                completedActivitiesContainer.childElementCount
+            completedActivitiesNum.textContent = completedActivitiesContainer.childElementCount
 
             function undoCompletion() {
                 unsubmitBtn.remove()
@@ -81,8 +85,7 @@ function addActivity() {
                 allDiv.classList.remove('completed')
                 allDiv.appendChild(allSubmitBtn)
 
-                completedActivitiesNum.textContent =
-                    completedActivitiesContainer.childElementCount
+                completedActivitiesNum.textContent = completedActivitiesContainer.childElementCount
             }
 
             unsubmitBtn.addEventListener('click', undoCompletion)
@@ -96,8 +99,7 @@ function addActivity() {
             newDiv.remove()
             allDiv.remove()
 
-            completedActivitiesNum.textContent =
-                completedActivitiesContainer.childElementCount
+            completedActivitiesNum.textContent = completedActivitiesContainer.childElementCount
         }
 
         removeBtn.addEventListener('click', removeActivity)
@@ -112,8 +114,7 @@ addBtn.addEventListener('click', function() {
 })
 
 document.addEventListener('keydown', function(event) {
-    if (event.key === 'Enter' &&
-        document.activeElement === inputtedActivity) {
+    if (event.key === 'Enter') {
         addActivity()
     }
 })
