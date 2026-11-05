@@ -7,10 +7,80 @@ const completedActivitiesNum = document.querySelector('#num-of-completed-activit
 const unfinishedTabBtn = document.querySelector('#unfinished-tab')
 const completedTabBtn = document.querySelector('#completed-tab')
 const allTabBtn = document.querySelector('#all-tab')
+const bothEmptyText = document.querySelector('#both-empty-text')
+const uncompletedEmptyText = document.querySelector('#to-be-done-empty-text')
+const completedEmptyText = document.querySelector('#completed-empty-text')
+const deleteAllCompletedBtn = document.querySelector('.delete-all-completed-btn')
 
 let itemCount = 0
 
 allTabBtn.style.backgroundColor = 'rgb(163, 154, 112)'
+
+function updateEmptyText(list) {
+    const bothSize = list[0]
+    const uncompletedSize = list[1]
+    const completedSize = list[2]
+    if (bothSize === 0) {
+        bothActivitiesContainer.appendChild(bothEmptyText)
+    }
+    else if (bothSize > 0) {
+        bothEmptyText.remove()
+    }
+    if (uncompletedSize === 0) {
+        activitiesContainer.appendChild(uncompletedEmptyText)
+    }
+    else if (uncompletedSize > 0) {
+        uncompletedEmptyText.remove()
+    }
+    if (completedSize === 0) {
+        completedActivitiesContainer.appendChild(completedEmptyText)
+    }
+    else if (completedSize > 0) {
+        completedEmptyText.remove()
+    }
+}
+
+function checkLengthContainer(container) {
+    const acceptable = ['all', 'both', 'uncompleted', 'completed']
+    if (acceptable.includes(container)) {
+        let allLength = 0
+        bothActivitiesContainer.childNodes.forEach(function(node) {
+            if (node.nodeType === 1) {
+                if (node.classList.contains('to-do-item-container')) {
+                    allLength += 1
+                }
+            }
+        })
+        let uncompletedLength = 0
+        activitiesContainer.childNodes.forEach(function(node) {
+            if (node.nodeType === 1) {
+                if (node.classList.contains('to-do-item-container')) {
+                    uncompletedLength += 1
+                }
+            }
+        })
+        let completedLength = 0
+        completedActivitiesContainer.childNodes.forEach(function(node) {
+            if (node.nodeType === 1) {
+                if (node.classList.contains('to-do-item-container')) {
+                    completedLength += 1
+                }
+            }
+        })
+        if (container === 'all') {
+            return [allLength, uncompletedLength, completedLength]
+        }
+        else if (container === 'both') {
+            return allLength
+        }
+        else if (container === 'uncompleted') {
+            return uncompletedLength
+        }
+        else if (container === 'completed') {
+            return completedLength
+        }
+    }
+}
 
 function addActivity() {
     const taskText = inputtedActivity.value.trim()
@@ -55,6 +125,8 @@ function addActivity() {
         allDiv.appendChild(allSubmitBtn)
         allDiv.appendChild(allRemoveBtn)
 
+        updateEmptyText(checkLengthContainer('all'))
+
         function completeActivity() {
             submitBtn.remove()
             allSubmitBtn.remove()
@@ -73,7 +145,8 @@ function addActivity() {
             allUnsubmitBtn.textContent = "↩️"
             allDiv.appendChild(allUnsubmitBtn)
 
-            completedActivitiesNum.textContent = completedActivitiesContainer.childElementCount
+            updateEmptyText(checkLengthContainer('all'))
+            completedActivitiesNum.textContent = checkLengthContainer('completed')
 
             function undoCompletion() {
                 unsubmitBtn.remove()
@@ -85,7 +158,8 @@ function addActivity() {
                 allDiv.classList.remove('completed')
                 allDiv.appendChild(allSubmitBtn)
 
-                completedActivitiesNum.textContent = completedActivitiesContainer.childElementCount
+                updateEmptyText(checkLengthContainer('all'))
+                completedActivitiesNum.textContent = checkLengthContainer('completed')
             }
 
             unsubmitBtn.addEventListener('click', undoCompletion)
@@ -99,11 +173,22 @@ function addActivity() {
             newDiv.remove()
             allDiv.remove()
 
-            completedActivitiesNum.textContent = completedActivitiesContainer.childElementCount
+            updateEmptyText(checkLengthContainer('all'))
+            completedActivitiesNum.textContent = checkLengthContainer('completed')
         }
 
-        removeBtn.addEventListener('click', removeActivity)
-        allRemoveBtn.addEventListener('click', removeActivity)
+        removeBtn.addEventListener('click', function() {
+            const confirmation = confirm("Are you sure you want to remove this activity?")
+            if (confirmation) {
+                removeActivity()
+            }
+        })
+        allRemoveBtn.addEventListener('click', function() {
+            const confirmation = confirm("Are you sure you want to remove this activity?")
+            if (confirmation) {
+                removeActivity()
+            }
+        })
     }
 
     inputtedActivity.value = ""
@@ -147,4 +232,32 @@ completedTabBtn.addEventListener('click', function() {
     completedActivitiesContainer.classList.add('active')
     activitiesContainer.classList.remove('active')
     bothActivitiesContainer.classList.remove('active')
+})
+
+deleteAllCompletedBtn.addEventListener('click', function() {
+    let deletable = []
+    const confirmation = confirm("Are you sure you want to delete all completed activities?")
+        if (confirmation) {
+            completedActivitiesContainer.childNodes.forEach(function(node) {
+                if (node.nodeType === 1) {
+                    if (node.classList.contains('to-do-item-container')) {
+                        deletable.push(node)
+                    }
+                }
+            })
+            bothActivitiesContainer.childNodes.forEach(function(node) {
+                if (node.nodeType === 1) {
+                    if (node.classList.contains('to-do-item-container')) {
+                        if (node.classList.contains('completed')) {
+                            deletable.push(node)
+                        }
+                    }
+                }
+            })
+            deletable.forEach(function(item) {
+                item.remove()
+            })
+            updateEmptyText(checkLengthContainer('all'))
+            completedActivitiesNum.textContent = checkLengthContainer('completed')
+        }
 })
