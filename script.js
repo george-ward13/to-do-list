@@ -14,12 +14,18 @@ const deleteAllCompletedBtn = document.querySelector('.delete-all-completed-btn'
 
 let itemCount = 0
 
+let tasks = JSON.parse(localStorage.getItem('myTodoTasks')) || []
+// the || essentially means 'or', where if the program can't find the 'myTodoTasks' key, it will store the variable as [] instead of null
+
+function saveTasks() {
+    localStorage.setItem('myTodoTasks', JSON.stringify(tasks))
+}
+
 allTabBtn.style.backgroundColor = 'rgb(163, 154, 112)'
 
 function updateEmptyText(list) {
-    const bothSize = list[0]
-    const uncompletedSize = list[1]
-    const completedSize = list[2]
+    const [bothSize, uncompletedSize, completedSize] = list
+    // divides the list into three constants
     if (bothSize === 0) {
         bothActivitiesContainer.appendChild(bothEmptyText)
     }
@@ -82,10 +88,18 @@ function checkLengthContainer(container) {
     }
 }
 
-function addActivity() {
-    const taskText = inputtedActivity.value.trim()
+function addActivity(savedTask = null) {
+    const taskText = savedTask ? savedTask.text : inputtedActivity.value.trim()
+    // basically saying if the savedTask has a value, it should be the variable (from the localStorage) and otherwise, it is the entered value
 
     if (taskText !== "") {
+        // Use the saved task object if loading from storage, otherwise create a new one and save it
+        const taskObj = savedTask || { id: Date.now(), text: taskText, completed: false }
+        if (!savedTask) {
+            tasks.push(taskObj)
+            saveTasks()
+        }
+
         itemCount += 1
         const newDiv = document.createElement('div')
         newDiv.classList.add('to-do-item-container')
@@ -145,6 +159,9 @@ function addActivity() {
             allUnsubmitBtn.textContent = "↩️"
             allDiv.appendChild(allUnsubmitBtn)
 
+            taskObj.completed = true
+            saveTasks()
+
             updateEmptyText(checkLengthContainer('all'))
             completedActivitiesNum.textContent = checkLengthContainer('completed')
 
@@ -158,6 +175,9 @@ function addActivity() {
                 allDiv.classList.remove('completed')
                 allDiv.appendChild(allSubmitBtn)
 
+                taskObj.completed = false
+                saveTasks()
+
                 updateEmptyText(checkLengthContainer('all'))
                 completedActivitiesNum.textContent = checkLengthContainer('completed')
             }
@@ -166,12 +186,22 @@ function addActivity() {
             allUnsubmitBtn.addEventListener('click', undoCompletion)
         }
 
+        // If this task was already completed before page refresh, run completeActivity() right away
+        if (taskObj.completed) {
+            completeActivity()
+        }
+
         submitBtn.addEventListener('click', completeActivity)
         allSubmitBtn.addEventListener('click', completeActivity)
 
         function removeActivity() {
             newDiv.remove()
             allDiv.remove()
+
+            tasks = tasks.filter(function(t) {
+                return t.id !== taskObj.id
+            })
+            saveTasks()
 
             updateEmptyText(checkLengthContainer('all'))
             completedActivitiesNum.textContent = checkLengthContainer('completed')
@@ -191,8 +221,15 @@ function addActivity() {
         })
     }
 
-    inputtedActivity.value = ""
+    if (!savedTask) {
+        inputtedActivity.value = ""
+    }
 }
+
+// Load any saved tasks when the page opens
+tasks.forEach(function(savedTask) {
+    addActivity(savedTask)
+})
 
 addBtn.addEventListener('click', function() {
     addActivity()
@@ -237,27 +274,33 @@ completedTabBtn.addEventListener('click', function() {
 deleteAllCompletedBtn.addEventListener('click', function() {
     let deletable = []
     const confirmation = confirm("Are you sure you want to delete all completed activities?")
-        if (confirmation) {
-            completedActivitiesContainer.childNodes.forEach(function(node) {
-                if (node.nodeType === 1) {
-                    if (node.classList.contains('to-do-item-container')) {
+    if (confirmation) {
+        completedActivitiesContainer.childNodes.forEach(function(node) {
+            if (node.nodeType === 1) {
+                if (node.classList.contains('to-do-item-container')) {
+                    deletable.push(node)
+                }
+            }
+        })
+        bothActivitiesContainer.childNodes.forEach(function(node) {
+            if (node.nodeType === 1) {
+                if (node.classList.contains('to-do-item-container')) {
+                    if (node.classList.contains('completed')) {
                         deletable.push(node)
                     }
                 }
-            })
-            bothActivitiesContainer.childNodes.forEach(function(node) {
-                if (node.nodeType === 1) {
-                    if (node.classList.contains('to-do-item-container')) {
-                        if (node.classList.contains('completed')) {
-                            deletable.push(node)
-                        }
-                    }
-                }
-            })
-            deletable.forEach(function(item) {
-                item.remove()
-            })
-            updateEmptyText(checkLengthContainer('all'))
-            completedActivitiesNum.textContent = checkLengthContainer('completed')
-        }
+            }
+        })
+        deletable.forEach(function(item) {
+            item.remove()
+        })
+
+        tasks = tasks.filter(function(t) {
+            return t.completed === false
+        })
+        saveTasks()
+
+        updateEmptyText(checkLengthContainer('all'))
+        completedActivitiesNum.textContent = checkLengthContainer('completed')
+    }
 })
